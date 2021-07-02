@@ -82,7 +82,32 @@ Promise.reject('some error')
 - 状态变为 fulfilled 会触发后续的 then 回调
 - 状态变为 rejected 会触发后续的 catch 回调
 
- 
+- 在 then/catch 后继续返回 Promise，此时可能会发生状态变化
+
+```js
+// then() 一般正常返回 fulfilled 状态的 promise
+Promise.resolve().then(() => {
+    return 100
+})
+
+//  then() 之后抛出错误，会返回 rejected 状态的 promise
+Promise.resolve().then(() => {
+    throw new Error('err')
+})
+
+//  catch() 不抛出错误，会返回 fulfilled 状态的 promise
+Promise.reject().catch(() => {
+    console.error('catch some error')
+})
+
+// catch() 抛出错误，会返回 rejected 状态的 promise
+Promise.reject().catch(() => {
+    console.error('catch some err')
+    throw new Error('err')
+})
+```
+
+
 
 ### 3. async/await
 
