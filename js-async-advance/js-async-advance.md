@@ -138,7 +138,54 @@ Promise.resolve().then(() => {
 
 ### 3. async/await
 
+- 语法介绍
+- 和 Promise 的关系
+- 异步本质
+- for ... of
 
+#### 3.1 语法介绍
+
+用同步的方式来编写异步代码
+
+```js
+function loadImg(src) {
+    return new Promise((resolve, reject) => {
+        const img = document.createElement('img')
+        img.src = src
+        img.onload = () => {
+            resolve(img)
+        }
+        img.onerror = () => {
+            const err = new Error('failed load image')
+            reject(err)
+        }
+    })
+}
+
+async function loadImg1() {
+    const src1 = 'http://www.imooc.com/static/img/index/logo_new.png'
+    const img = await loadImg(src1)
+    return img1
+}
+
+async function loadImg2() {
+    const src2 = 'https://avatars3.githubusercontent.com/u/9583120'
+    const img = await loadImg(src2)
+    return img2
+}
+
+(async function() {
+    //  注意：await 必须放在 async 函数中，否则会报错
+    try {
+        const img1 = await loadImg1()
+        console.log(img1)
+        const img2 = awiat loadImg2()
+        console.log(img2)
+    } catch (err) {
+        console.log(err)
+    }
+})()
+```
 
 
 
