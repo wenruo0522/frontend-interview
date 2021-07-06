@@ -105,9 +105,36 @@ Promise.reject().catch(() => {
     console.error('catch some err')
     throw new Error('err')
 })
+
+//  example-1
+Promise.resolve().then(() => {
+    console.log(1)
+}).catch(() => {
+    console.log(2)
+}).then(() => {
+    console.log(3)
+})  // 1 3
+
+//  example-2
+Promise.resolve().then(() => {
+    console.log(1)
+    throw new Error('err')
+}).catch(() => {
+    console.log(2)
+}).then(() => {
+    console.log(3)
+})  //  1  2  3
+
+//  example-3
+Promise.resolve().then(() => {
+    console.log(1)
+    throw new Error('err')
+}).catch(() => {
+    console.log(2)
+}).catch(() => {
+    console.log(3)
+})  //  1  2 
 ```
-
-
 
 ### 3. async/await
 
