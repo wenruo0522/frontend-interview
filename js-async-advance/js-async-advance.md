@@ -187,7 +187,11 @@ async function loadImg2() {
 })()
 ```
 
+#### 3.2 async/await 与 Promise'
 
+-  执行 async 函数，返回的是 Promise 对象
+- await 相当于 Promise 中的 then
+- try ... catch 可以捕获异常，代替了 Promise 中的 catch
 
 ### 4. 微任务和宏任务
 
