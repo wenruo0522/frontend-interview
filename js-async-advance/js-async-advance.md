@@ -187,13 +187,147 @@ async function loadImg2() {
 })()
 ```
 
-#### 3.2 async/await 与 Promise'
+#### 3.2 async/await 与 Promise
 
--  执行 async 函数，返回的是 Promise 对象
+- 执行 async 函数，返回的是 Promise 对象
+
+  ```js
+  async function fn1() {
+      return 100  //  相当于 return Promise.resolve(100)
+  }
+  const result = fn1() // result 为 Promise 并且是 fulfilled 状态
+  result.then(data => {
+      console.log(data) //  100
+  })
+  ```
+
 - await 相当于 Promise 中的 then
+
+  await 后面跟 Promise 对象：会阻断后续代码，等状态变为 resolved，才获取结果并继续执行
+
+  await 后面跟着非 Promise 对象：则直接返回该对象
+
+  ```js
+  (async function() {
+      const p1 = new Promise(() => {})
+      await p1
+      console.log('p1')  // 没有打印，无法执行
+  })()
+  
+  (async function() {
+      const p2 = Promise.resolve(100)
+      const res = await p2
+      console.log(res) // 100
+  })()
+  
+  (async function() {
+      const res = await 100
+      console.log(res) // 100
+  })()
+  
+  (async function() {
+      const p3 = Promise.reject('some err')
+      const res = await p3
+      console.log(res) // 没有打印，无法执行
+  })()
+  ```
+
 - try ... catch 可以捕获异常，代替了 Promise 中的 catch
+
+  ```js
+  (astnc function() {
+      const p4 = Promise.reject('err')
+      try {
+          const res = await p4
+          console.log(res)
+      } catch (err) {
+          console.log(err)
+      }
+  })()
+  ```
+
+#### 3.3 异步本质
+
+- await 是同步语法，本质还是异步调用
+
+  ```js
+  async function async1() {
+      console.log('async1 start') // 2
+      await async2()
+      console.log('async1 end') //  5
+  }
+  
+  async function async2() {
+      console.log('async2')  //  3
+  }
+  
+  console.log('script start')  // 1
+  async1() 
+  console.log('script end')  // 4
+  ```
+
+#### 3.4 for...of
+
+```js
+//  定时计算乘法
+function multi(num) {
+	return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(num * num)
+        }, 1000)
+    })
+}
+const nums = [1, 4, 9]
+(async function() {
+    nums.forEach(async (i) => {
+    const res = await multi(i)
+    console.log(res)
+	}) //  使用 forEach ，是 1s 之后打印出所有结果，即 3 个值是一起被计算出来的
+})()
+
+(async function() {
+    for (let i of nums) {
+        const res = await multi(i)
+        console.log(res)
+    }
+})()  //  使用 for...of ，可以让计算挨个串行执行
+```
 
 ### 4. 微任务和宏任务
 
+- 宏任务：setTimeout setInterval DOM 事件
+- 微任务：Promise async/await
+- 微任务比宏任务执行的更早
 
+```js
+console.log(100)
+setTimeout(() => {
+    console.log(200)
+})
+Promise.resolve().then(() => {
+    console.log(300)
+})
+console.log(400)
+//  100 400 300 200
+```
+
+#### 4.1 event loop 和 DOM 渲染
+
+- 每一次 call stack 结束，都会触发 DOM 渲染
+- 然后进行 event loop
+
+```js
+const $p1 = $('<p>一段文字</p>')
+const $p2 = $('<p>一段文字</p>')
+const $p3 = $('<p>一段文字</p>')
+$('#container').append($p1).append($p2).append($p3)
+
+console.log($('#containeer').children().length)  //  3
+alert('本次 call stack 结束，DOM 结构已更新，但尚未触发渲染')
+// （alert 会阻断 js 执行，也会阻断 DOM 渲染，便于查看效果）
+```
+
+
+
+#### 4.2 宏任务和微任务的区别
 
