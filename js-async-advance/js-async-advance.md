@@ -325,9 +325,63 @@ $('#container').append($p1).append($p2).append($p3)
 console.log($('#containeer').children().length)  //  3
 alert('本次 call stack 结束，DOM 结构已更新，但尚未触发渲染')
 // （alert 会阻断 js 执行，也会阻断 DOM 渲染，便于查看效果）
+
+
 ```
 
-
-
 #### 4.2 宏任务和微任务的区别
+
+- 宏任务：DOM 渲染后再触发
+- 微任务：DOM 渲染前再触发
+
+```js
+const $p1 = $('<p>一段文字</p>')
+const $p2 = $('<p>一段文字</p>')
+const $p3 = $('<p>一段文字</p>')
+$('#container').append($p1).append($p2).append($p3)
+
+// 微任务
+Promise.resolve().then(() => {
+    console.log($('#container').children().length)
+    alert('micro task')
+})
+
+// 宏任务
+setTimeout(() => {
+    console.log($('#container').children().length)
+    alert('macro task')
+})
+//   1. micro task 2. DOM 渲染  3. macro task
+```
+
+### 5. Example
+
+```js
+async function async1() {
+    console.log('async1 start')  // 2
+    await async2()
+    console.log('async1 end')  // 6
+}
+
+async function async2() {
+    console.log('async2')  // 3
+}
+
+console.log('script start')  // 1
+
+setTimeout(function() {
+    console.log('setTimeout')
+}, 0)  // 8
+
+async1()
+
+new Promise(function(resolve) {
+    console.log('promise1')  // 4
+    resolve()
+}).then(function() {
+    console.log('promise2')  // 7
+})
+
+console.log('script end')  // 5
+```
 
