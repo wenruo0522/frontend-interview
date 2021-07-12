@@ -80,3 +80,38 @@ for (let i = 0; i < 20; i++) {
 list.appendChild(frag)
 ```
 
+### 2. BOM
+
+- navigator
+
+  ```js
+  const ua = navigator.userAgent
+  const isChrome = ua.indexOf('chrome')
+  ```
+
+- screen
+
+  ```js
+  console.log(screen.width)
+  console.log(screen.height)
+  ```
+
+- location
+
+  ```js
+  console.log(location.href)
+  console.log(location.protocol)
+  console.log(location.pathname)
+  console.log(location.search)
+  console.log(location.hash)
+  ```
+
+- history
+
+  ```js
+  history.back()
+  history.forward()
+  ```
+
+  
+
