@@ -113,5 +113,70 @@ list.appendChild(frag)
   history.forward()
   ```
 
+
+### 3. 事件
+
+- 事件绑定
+
+  ```js
+  const btn = document.getElementById('btn')
+  btn.addEventListener('click', event => {
+      console.log('clicked')
+  })
   
+  // 通用的事件绑定
+  function bindEvent(elem, type, fn) {
+      elem.addEventListener(type, fn)
+  }
+  
+  const btn = document.getElementById('btn')
+  bindEvent(btn, 'click', event => {
+      console.log(event.target)
+      event.preventDefault() // 阻止默认行为
+      alert('clicked')
+  })
+  ```
+
+- 事件冒泡
+
+  ```js
+  function bindEvent(elem, type, fn) {
+      elem.addEventListener(type, fn)
+  }
+  
+  const p1 = document.getElemnetById('p1')
+  const body = document.body
+  bindEvent(p1, 'click', event => {
+      event.stopPropagation()  // 阻止事件冒泡
+      alert('actived')
+  })
+  bindEvent(body, 'click', event => {
+      alert('cancel')
+  })
+  ```
+
+- 事件代理
+
+  ```html
+  <div id="div">
+      <a href="#">a1</a>
+      <a href="#">a2</a>
+      <a href="#">a3</a>
+      <a href="#">a4</a>
+  </div>
+  ```
+
+  ```js
+  // 子元素过多，可以将通用点击事件代理到父元素上
+  const div = document.getElementById('div')
+  div.addEventListener('click', event => {
+      event.preventDefault() //  阻止默认行为
+      const target = event.target
+      if (event.nodeName === 'A') {
+          alert(target.innerHTML)
+      }
+  })
+  ```
+
+### 4. Ajax
 
