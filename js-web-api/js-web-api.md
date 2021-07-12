@@ -180,3 +180,7 @@ list.appendChild(frag)
 
 ### 4. Ajax
 
+- XMLHttpRequest
+- 状态码
+- 跨域：同源策略与跨域解决方案
+
