@@ -181,6 +181,49 @@ list.appendChild(frag)
 ### 4. Ajax
 
 - XMLHttpRequest
+
 - 状态码
+
+  ```js
+  const xhr = new XMLHttpRequest()
+  xhr.open('GET', '/api/data.json', true) // true 为异步
+  xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+              alert(xhr.responseText)
+          } else if (xhr.status === 404) {
+              console.log('404 not found')
+          }
+      }
+  }
+  
+  xhr.send(null)
+  ```
+
 - 跨域：同源策略与跨域解决方案
 
+- Promise 封装 Ajax
+
+  ```js
+  function ajax(url) {
+      return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest()
+          xhr.open('GET', url, true)
+          xhr.onreadystatechange = function() {
+              if (xhr.readyStatus === 4) {
+                  if (xhr.status === 200) {
+                      resolve(JSON.parse(xhr.responseText))
+                  } else if (xhr.status === 404 || xhr.status === 500) {
+                      reject(new Error(`404 not found`))
+                  }
+              }
+          }
+          xhr.send(null)
+      })
+  }
+  
+  const url = '/api/data.json'
+  ajax(url).then(res => console.log(res)).catch(err => console.log(err))
+  ```
+
+  
