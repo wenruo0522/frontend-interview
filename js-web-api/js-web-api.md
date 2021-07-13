@@ -226,4 +226,15 @@ list.appendChild(frag)
   ajax(url).then(res => console.log(res)).catch(err => console.log(err))
   ```
 
-  
+
+### 5. 存储
+
+- Cookie 最大存储 4KB
+- Cookie 在每次 http 请求时都需要发送到服务端，增加请求数据量
+- 只能使用 document.cookie 进行修改
+- localStorage 和 sessionStorage 最大可以存储 5M
+- setItem 和 getItem 相对于 document.cookie 更易用
+- 不会随着 http 请求被发送出去
+- localStorage 数据会永久存储，除非代码或者手动删除
+- sessionStorage 数据只存在与当前会话，浏览器关闭就自动清空
+
