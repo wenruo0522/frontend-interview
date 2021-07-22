@@ -39,3 +39,36 @@ document.addEventListener('DOMContentLoaded', function() {
 // 1. dom content loaded  2. img loaded  3. window loaded
 ```
 
+### 3. 性能优化
+
+- 使用内存与缓存
+
+  ```js
+  //  静态资源加 hash 后缀，根据文件内容计算 hash
+  module.exports = {
+      mode: 'production',
+      entry: path.join(__dirname, 'src', 'index'),
+      output: {
+          filename: 'bundle.[contenthash].js',
+          path: path.join(__dirname, 'dist')
+      }
+  }
+  ```
+
+- 减少 CPU 计算量，减少网络加载耗时
+
+- 加载更快：可以减少资源体积，比如压缩代码。可以减少访问次数，比如合并代码，SSR 服务端渲染
+
+  可以使用 CDN 进行加速
+
+- 渲染更快：图片懒加载，上滑加载更多，对 DOM 操作进行优化，节流，防抖
+
+  ```html
+  <img id='img' src='preview.png' data-realsrc='abc.png'/>
+  <script type="text/javascript">
+      let img = document.getElemnetById('img')
+      img.src = img.getAttribute('data=realsrc')
+  </script>
+  ```
+
+  
