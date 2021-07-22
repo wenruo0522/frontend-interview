@@ -71,4 +71,35 @@ document.addEventListener('DOMContentLoaded', function() {
   </script>
   ```
 
+
+#### 4. 节流与防抖
+
+- 节流   
+
+- 防抖
+
+  ```js
+  const input = document.getElementById('input')
+  
+  function debounce(fn, delay = 500) {
+      let timer = null
+      
+      return function() {
+          if (timer) {
+              clearTimeout(timer)
+          }
+          
+          timer = setTimeout(() => {
+              fn.apply(this, arguments)
+              timer = null
+          }, delay)
+      }
+  }
+  
+  input.addEventListener('keyup', debounce((e) => {
+      // ToDo
+      console.log(e.target)
+  }, 600))
+  ```
+
   
