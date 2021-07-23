@@ -74,7 +74,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
 #### 4. 节流与防抖
 
-- 节流   
+- 节流  
+
+  ```js
+  const div = document.getElementById('div')
+  
+  function throttle(fn, delay = 100) {
+      let timer = null
+      
+      return function() {
+          if (timer) {
+              return
+          }
+          
+          timer = setTimeout(() => {
+              fn.apply(this, arguments)
+              timer = null
+          }, delay)
+      }
+  }
+  
+  div.addEventListener('drag', throttle(function(e) {
+      console.log(e.offsetX, e.offsetY)
+  }))
+  ```
 
 - 防抖
 
@@ -102,4 +125,30 @@ document.addEventListener('DOMContentLoaded', function() {
   }, 600))
   ```
 
-  
+
+#### 5. Web 安全
+
+- XSS 跨站请求攻击
+
+  例如博客网站，攻击者在文章中植入一段脚本，比如获取文章阅读者的 cookie。
+
+  ```js
+  段落...
+  <script>alert(document.cookie)</script>
+  段落...
+  ```
+
+  预防措施：可以将 < 和 > 进行转义。预防 XSS 攻击。npm 上有类似的第三方库：XSS
+
+- XSRF 跨站请求伪造
+
+  简单的 XSRF 场景。有一个购物链接：fakeMall.com/pay?id=bigToy 该链接没有使用校验，一经点击就自动请求。
+
+  ```html
+  <img src="fakeMall.com/pay?id=bigToy"/>
+  ```
+
+  img 标签无跨域限制，可以实现 XSRF 攻击。只要阅读者点击链接，加载到该 img 标签。
+
+  预防：使用 post 接口，增加验证码，例如密码，短信验证码，指纹等。
+
