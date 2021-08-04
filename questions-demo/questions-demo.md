@@ -134,3 +134,114 @@ console.log(spliceRes, arr) // [20, 30]  [10, 'a', 'b', 'c', 40, 50]
 // [10, NaN, NaN] 
 ```
 
+### 4. 闭包
+
+```js
+// 自由变量示例 ———— 内存会被释放
+let a = 0
+function fn1() {
+    let a1 = 100
+    
+    function fn2() {
+        let a2 = 200
+        
+        function fn3() {
+            let a3 = 300
+            return a + a1 + a2 + a3
+        }
+        fn3()
+    }
+    fn2()
+}
+fn1()
+
+//  闭包：函数作为返回值 ———— 内存不会被释放
+function create() {
+    let a = 100
+    return function() {
+        console.log(a)
+    }
+}
+let fn = create()
+let a = 200
+fn() // 100
+
+function print(fn) {
+    let a = 200
+    fn()
+}
+let a = 100
+function fn() {
+    console.log(a)
+}
+print(fn)  // 100
+```
+
+### 5. 函数声明与函数表达式
+
+- 函数声明会在代码执行前预加载，而函数表达式不会
+
+```js
+// 函数声明
+const res = sum(10, 20)
+console.log(res)  // 30
+function sum(x, y) {
+    return x + y
+}
+
+// 函数表达式
+const res = sum(10, 20)
+console.log(res)  // ReferenceError
+const sum = function(x, y) {
+    return x + y
+}
+```
+
+### 6. object 
+
+- Object.create(null) 创建出来的对象没有原型
+- new Object() 等价与 {}
+
+### 7. 正则表达式
+
+```js
+// 邮政编码
+/\d{6}/
+
+// 小写英文字母
+/^[a-z]+$/
+    
+// 英文字母
+/^[a-zA-Z]+$/
+
+// 日期格式 2019-12-1
+/^\d{4}-\d{1,2}-\d{1,2}$/
+    
+// 用户名:字母开头，后面字母数字下划线，长度6-18
+/^[a-zA-Z]\w{5,17}$/
+
+// 简单的IP地址匹配
+/\d+\.\d+\.\d+\.\d+/
+```
+
+### 8. examples
+
+```js
+// 手写字符串 trim 方法，保证浏览器兼容性
+String.prototype.trim = function() {
+    return this.replace(/^\s+/, '').replace(/\s+$/, '')
+}
+
+// 获取多个数字中的最大值
+function max() {
+    const nums = Array.prototype.slice.call(arguments) // 类数组转为数组
+    let max = nums[0]
+    nums.forEach(n => {
+        if (n > max) {
+            max = n
+        }
+    })
+    return max
+}
+```
+
