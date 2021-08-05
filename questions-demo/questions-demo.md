@@ -245,3 +245,100 @@ function max() {
 }
 ```
 
+### 9. URLSearchParams
+
+```js
+// 传统方式
+function query(name) {
+    const search = location.search.substr(1)  // 去除查询字符串中的‘？’
+    // search = 'a=10&b=20&c=30' 
+    const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`, 'i')
+    const res = search.match(reg)
+    if (res === null) {
+        return null
+    }
+    return res[2]
+}
+query('d')
+
+// URLSearchParams
+function query(name) {
+    const search = location.search
+    const p = new URLSearchParams(search)
+    return p.get(name)
+}
+console.log(query('b'))
+```
+
+### 10. flat
+
+```js
+// [1, 2, 3, [4, 5]] -> [1, 2, 3, 4, 5]
+function flat(arr) {
+    // 验证数组元素中是否有数组
+    const isDeep = arr.some(item => item instanceof Array)
+    if (!isDeep) {
+        return arr
+    }
+    
+    const res = Array.prototype.concat.apply([], arr)
+    return flat(res)
+}
+```
+
+### 11. 数组去重
+
+```js
+function unique(arr) {
+    const res = []
+    arr.forEach(item => {
+        if (res.indexOf(item) < 0) {
+            res.push(item)
+        }
+    })
+    return res
+}
+
+// use set
+function unique(arr) {
+    const set = new Set(arr)
+    return [...set]
+}
+```
+
+### 12. requestAnimationFrame
+
+- 动画流畅，更新频率需要 60f/s。即 16.67ms 更新一次视图
+- setTimeout 需要手动控制频率，而RAF由浏览器自动控制
+- 浏览器标签隐藏了，或者iframe隐藏了，RAF会暂停，setTimeout依然执行 
+
+```js
+// 3s 宽度从 100px 变为 640px，增加 540px
+// 60f/s 3s 180frames 每一帧变化 3px
+
+const $div1 = $('#div1')
+let curWidth = 100
+const maxWidth = 640
+
+// setTimeout
+function animate() {
+    curWidth = curWidth + 3
+    $div1.css('width', curWidth)
+    if (curWidth < maxWidth) {
+        setTimeout(animate, 16.7)
+    }
+}
+animate()
+
+// RAF
+function animate() {
+    curWidth = curWidth + 3
+    $div1.css('width', curWidth)
+    if (curWidth < maxWidth) {
+        window.requestAnimationFrame(animate)
+    }
+}
+
+animate()
+```
+
